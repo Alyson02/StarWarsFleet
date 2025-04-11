@@ -1,6 +1,6 @@
 ﻿namespace StarWarsFleet.Domain.Entities;
 
-public class Base
+public class BaseEntity
 {
     public Guid Id { get; set; }
 }

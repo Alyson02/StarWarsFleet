@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StarWarsFleet.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using StarWarsFleet.Infrastructure.Data;
 namespace StarWarsFleet.Infrastructure.Migrations
 {
     [DbContext(typeof(StarWarsDbContext))]
-    partial class StarWarsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250411025950_Normalization")]
+    partial class Normalization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
