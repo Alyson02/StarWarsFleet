@@ -11,7 +11,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.15" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="xunit" Version="2.4.2"/>
@@ -26,8 +25,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\StarWarsFleet.Application\StarWarsFleet.Application.csproj" />
       <ProjectReference Include="..\StarWarsFleet.Domain\StarWarsFleet.Domain.csproj" />
       <ProjectReference Include="..\StarWarsFleet.Infrastructure\StarWarsFleet.Infrastructure.csproj" />
+      <ProjectReference Include="..\StarWarsFleet.Web\StarWarsFleet.Web.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Unity\" />
     </ItemGroup>
 
 </Project>
