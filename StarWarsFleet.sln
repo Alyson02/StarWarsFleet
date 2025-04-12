@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsFleet.Domain", "Sta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsFleet.Infrastructure", "StarWarsFleet.Infrastructure\StarWarsFleet.Infrastructure.csproj", "{0709D22A-3E65-472F-A5F4-75B76CEE387F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarWarsFleet.Tests", "StarWarsFleet.Tests\StarWarsFleet.Tests.csproj", "{E07A7F4A-5427-4759-898F-E0E2069F0549}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{0709D22A-3E65-472F-A5F4-75B76CEE387F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0709D22A-3E65-472F-A5F4-75B76CEE387F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0709D22A-3E65-472F-A5F4-75B76CEE387F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E07A7F4A-5427-4759-898F-E0E2069F0549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E07A7F4A-5427-4759-898F-E0E2069F0549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E07A7F4A-5427-4759-898F-E0E2069F0549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E07A7F4A-5427-4759-898F-E0E2069F0549}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
