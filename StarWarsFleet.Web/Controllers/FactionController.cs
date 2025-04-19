@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StarWarsFleet.Application.Factions.UseCases.Create;
 using StarWarsFleet.Domain.Entities;
 using StarWarsFleet.Domain.Models;
 using StarWarsFleet.Infrastructure.Data;
@@ -7,15 +8,14 @@ using StarWarsFleet.Infrastructure.Data;
 namespace StarWarsFleet.Web.Controllers;
 
 [Route("faction")]
-public class FactionController(StarWarsDbContext context) : Controller
+public class FactionController(StarWarsDbContext context, Handler handler) : Controller
 {
+    private readonly Handler handler = handler;
+    
     [HttpPost]
-    public async Task<IActionResult> AddFaction([FromBody] FactionViewModel model)
+    public async Task<IActionResult> AddFaction([FromBody] Command command)
     {
-        var faction = new FactionEntity { Id = Guid.NewGuid(), Name = model.Name };
-        await context.Factions.AddAsync(faction);
-        await context.SaveChangesAsync();
-        return Ok(faction);
+        return Ok(await handler.HandleAsync(command));
     }
     
     [HttpGet]

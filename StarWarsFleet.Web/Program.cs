@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using FactionHandler = StarWarsFleet.Application.Factions.UseCases.Create.Handler;
 using StarWarsFleet.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
+ConfigureServices(builder.Services);
+
 
 var app = builder.Build();
 
@@ -49,5 +52,11 @@ if (app.Environment.IsDevelopment())
 
 
 app.Run();
+return;
+
+void ConfigureServices(IServiceCollection services)
+{
+    services.AddTransient<FactionHandler>();
+}
 
 public partial class Program { }
