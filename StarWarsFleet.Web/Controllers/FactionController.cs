@@ -10,8 +10,6 @@ namespace StarWarsFleet.Web.Controllers;
 [Route("faction")]
 public class FactionController(StarWarsDbContext context, Handler handler) : Controller
 {
-    private readonly Handler handler = handler;
-    
     [HttpPost]
     public async Task<IActionResult> AddFaction([FromBody] Command command)
     {
