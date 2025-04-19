@@ -8,13 +8,12 @@ using StarWarsFleet.Infrastructure.Data;
 namespace StarWarsFleet.Web.Controllers;
 
 [Route("faction")]
-public class FactionController(StarWarsDbContext context, Handler handler) : Controller
+public class FactionController(StarWarsDbContext context, Handler handler, Application.Factions.UseCases.Delete.Handler deleteHanlder) : Controller
 {
     [HttpPost]
     public async Task<IActionResult> AddFaction([FromBody] Command command)
     {
         var result = await handler.HandleAsync(command);
-        
         return Created($"/faction/{result.Data?.Id}", result.Data );
     }
     
@@ -27,14 +26,18 @@ public class FactionController(StarWarsDbContext context, Handler handler) : Con
     [HttpDelete("{factionId}")]
     public async Task<IActionResult> DeleteFaction([FromRoute] string factionId)
     {
-        var faction = await GetFaction(factionId);
-        
-        if (faction is null) return NotFound();
-        
-        context.Factions.Remove(faction);
-        await context.SaveChangesAsync();
-        
-        return Ok();
+        try
+        {
+            return Ok(await deleteHanlder.HandleAsync(new Application.Factions.UseCases.Delete.Command(){ Id = factionId }));
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ResponseModel.FromException(e));
+        }
     }
 
     [HttpPut("{factionId}")]
