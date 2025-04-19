@@ -1,42 +1,20 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using DeleteHandler = StarWarsFleet.Application.Factions.UseCases.Delete.Handler;
 using FactionHandler = StarWarsFleet.Application.Factions.UseCases.Create.Handler;
 using StarWarsFleet.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+ConfigureMvc(builder.Services);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins",
-        x =>
-        {
-            x.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-});
+ConfigureDbContext(builder.Services);
 
-builder.Services.AddDbContext<StarWarsDbContext>(opt => {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+ConfigureMassTransit(builder.Services);
 
-builder.Services.AddMassTransit(x => {
-    x.UsingRabbitMq((ctx, cfg) => {
-        cfg.Host("localhost", "/", h => {
-            h.Username("guest");
-            h.Password("guest");
-        });
-    });
-});
-
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
+ConfigureSwagger(builder.Services);
 
 ConfigureServices(builder.Services);
-
 
 var app = builder.Build();
 
@@ -50,13 +28,54 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.Run();
 return;
 
 void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient<FactionHandler>();
+    services.AddTransient<DeleteHandler>();
 }
 
-public partial class Program { }
+void ConfigureMvc(IServiceCollection services)
+{
+    builder.Services.AddControllers();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAllOrigins",
+            x =>
+            {
+                x.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+    });
+}
+
+void ConfigureDbContext(IServiceCollection services)
+{
+    builder.Services.AddDbContext<StarWarsDbContext>(opt => {
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+}
+
+void ConfigureMassTransit(IServiceCollection services)
+{
+    builder.Services.AddMassTransit(x => {
+        x.UsingRabbitMq((ctx, cfg) => {
+            cfg.Host("localhost", "/", h => {
+                h.Username("guest");
+                h.Password("guest");
+            });
+        });
+    });
+}
+
+void ConfigureSwagger(IServiceCollection services)
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
+
+public abstract partial class Program { }
