@@ -1,6 +1,10 @@
-﻿namespace StarWarsFleet.Application.Shared.UseCases.Abstractions;
+﻿using StarWarsFleet.Domain.Models;
 
-public interface IHandler<in TRequest, TResponse> where TRequest : IRequest where TResponse : IResponse
+namespace StarWarsFleet.Application.Shared.UseCases.Abstractions;
+
+public interface IHandler<in TRequest, TResponse>
+    where TRequest : IRequest
+    where TResponse : class
 {
-    Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
+    Task<ResponseModel<TResponse>> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
 }

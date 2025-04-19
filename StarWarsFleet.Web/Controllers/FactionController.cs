@@ -15,7 +15,9 @@ public class FactionController(StarWarsDbContext context, Handler handler) : Con
     [HttpPost]
     public async Task<IActionResult> AddFaction([FromBody] Command command)
     {
-        return Ok(await handler.HandleAsync(command));
+        var result = await handler.HandleAsync(command);
+        
+        return Created($"/faction/{result.Data?.Id}", result.Data );
     }
     
     [HttpGet]

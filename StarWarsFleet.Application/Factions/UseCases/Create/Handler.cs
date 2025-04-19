@@ -1,10 +1,11 @@
 ﻿using StarWarsFleet.Application.Shared.UseCases.Abstractions;
 using StarWarsFleet.Domain.Entities;
+using StarWarsFleet.Domain.Models;
 using StarWarsFleet.Infrastructure.Data;
 
 namespace StarWarsFleet.Application.Factions.UseCases.Create;
 
-public record Handler : IHandler<Command, Response>
+public record Handler : IHandler<Command, FactionEntity>
 {
     private readonly StarWarsDbContext _dbContext;
 
@@ -13,15 +14,17 @@ public record Handler : IHandler<Command, Response>
         _dbContext = dbContext;
     }
 
-    public async Task<Response> HandleAsync(Command request, CancellationToken cancellationToken = default)
+    public async Task<ResponseModel<FactionEntity>> HandleAsync(Command request, CancellationToken cancellationToken = default)
     {
-        await _dbContext.AddAsync(new FactionEntity
+        var inserted = await _dbContext.AddAsync(new FactionEntity
         {
             Name = request.Name
         }, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new Response("Faction created");
+        return ResponseModel<FactionEntity>.CreateSuccess(inserted.Entity);
     }
+
+   
 }
