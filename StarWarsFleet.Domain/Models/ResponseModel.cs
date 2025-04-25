@@ -28,7 +28,6 @@ public class ResponseModel<T>
             new List<string> { ex.Message });
 }
 
-// Classe base sem tipo genérico para casos onde não há dados a retornar
 public class ResponseModel : ResponseModel<object>
 {
     private ResponseModel(bool success, string message, object? data, List<string>? errors = null) 
