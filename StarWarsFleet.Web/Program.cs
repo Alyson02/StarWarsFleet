@@ -1,7 +1,8 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using DeleteHandler = StarWarsFleet.Application.Factions.UseCases.Delete.Handler;
-using FactionHandler = StarWarsFleet.Application.Factions.UseCases.Create.Handler;
+using CreateHandler = StarWarsFleet.Application.Factions.UseCases.Create.Handler;
+using UpdateHandler = StarWarsFleet.Application.Factions.UseCases.Update.Handler;
 using StarWarsFleet.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +34,9 @@ return;
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.AddTransient<FactionHandler>();
+    services.AddTransient<CreateHandler>();
     services.AddTransient<DeleteHandler>();
+    services.AddTransient<UpdateHandler>();
 }
 
 void ConfigureMvc(IServiceCollection services)
