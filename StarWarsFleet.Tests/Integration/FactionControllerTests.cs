@@ -1,7 +1,9 @@
+using System.Dynamic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Xunit.Sdk;
+using Newtonsoft.Json;
+using StarWarsFleet.Application.Factions.UseCases.Update;
 
 namespace StarWarsFleet.Tests.Integration;
 
@@ -39,7 +41,7 @@ public class FactionControllerTests(CustomWebApplicationFactory factory) : IClas
     [Fact]
     public async Task UpdateFaction_ShouldModifyExistingFaction()
     {
-        var createModel = new FactionViewModel { Name = "Império Galáctico" };
+        var createModel = new Command() { Name = "Império Galáctico" };
         var postResponse = await _client.PostAsJsonAsync("/faction", createModel);
         var createdFaction = await postResponse.Content.ReadFromJsonAsync<FactionEntity>();
 
@@ -48,8 +50,10 @@ public class FactionControllerTests(CustomWebApplicationFactory factory) : IClas
 
         putResponse.EnsureSuccessStatusCode();
 
-        var updatedFaction = await putResponse.Content.ReadFromJsonAsync<FactionEntity>();
-        Assert.Equal("Primeira Ordem", updatedFaction!.Name);
+        var rawContent = await putResponse.Content.ReadAsStringAsync();
+        var updatedFaction = JsonConvert.DeserializeObject<dynamic>(rawContent);
+
+        Assert.Equal("Primeira Ordem", updatedFaction!.data!.name.ToString());
     }
 
     [Fact]
