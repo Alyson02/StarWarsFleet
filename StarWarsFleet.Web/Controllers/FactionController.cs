@@ -35,7 +35,7 @@ public class FactionController(StarWarsDbContext context, CreateHandler handler,
         {
             return Ok(await deleteHandler.HandleAsync(new DeleteCommand(){ Id = factionId }));
         }
-        catch (KeyNotFoundException e)
+        catch (KeyNotFoundException)
         {
             return NotFound();
         }
@@ -52,7 +52,7 @@ public class FactionController(StarWarsDbContext context, CreateHandler handler,
         {
             return Ok(await updateHandler.HandleAsync(new UpdateCommand(){ Id = factionId, Name = model.Name }));
         }
-        catch (KeyNotFoundException e)
+        catch (KeyNotFoundException)
         {
             return NotFound();
         }

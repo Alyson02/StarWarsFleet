@@ -1,21 +1,21 @@
-using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using DeleteHandler = StarWarsFleet.Application.Factions.UseCases.Delete.Handler;
-using CreateHandler = StarWarsFleet.Application.Factions.UseCases.Create.Handler;
-using UpdateHandler = StarWarsFleet.Application.Factions.UseCases.Update.Handler;
-using StarWarsFleet.Infrastructure.Data;
+
+using StarWarsFleet.Application.Extensions;
+using StarWarsFleet.Infrastructure.Extensions;
+using StarWarsFleet.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ConfigureMvc(builder.Services);
+builder.Services.AddMvc();
 
-ConfigureDbContext(builder.Services);
+builder.Services.ConfigureDbContext(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 
-ConfigureMassTransit(builder.Services);
+builder.Services
+.ConfigureMassTransit(builder.Configuration.GetSection("RabbitMQ:Username").Value ?? string.Empty,
+ builder.Configuration.GetSection("RabbitMQ:Password").Value ?? string.Empty);
 
-ConfigureSwagger(builder.Services);
+builder.Services.ConfigureDocumentation();
 
-ConfigureServices(builder.Services);
+builder.Services.AddHandlers();
 
 var app = builder.Build();
 
@@ -31,53 +31,5 @@ if (app.Environment.IsDevelopment())
 
 app.Run();
 return;
-
-void ConfigureServices(IServiceCollection services)
-{
-    services.AddTransient<CreateHandler>();
-    services.AddTransient<DeleteHandler>();
-    services.AddTransient<UpdateHandler>();
-}
-
-void ConfigureMvc(IServiceCollection services)
-{
-    builder.Services.AddControllers();
-
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowAllOrigins",
-            x =>
-            {
-                x.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-    });
-}
-
-void ConfigureDbContext(IServiceCollection services)
-{
-    builder.Services.AddDbContext<StarWarsDbContext>(opt => {
-        opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
-}
-
-void ConfigureMassTransit(IServiceCollection services)
-{
-    builder.Services.AddMassTransit(x => {
-        x.UsingRabbitMq((ctx, cfg) => {
-            cfg.Host("localhost", "/", h => {
-                h.Username("guest");
-                h.Password("guest");
-            });
-        });
-    });
-}
-
-void ConfigureSwagger(IServiceCollection services)
-{
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-}
 
 public abstract partial class Program { }
