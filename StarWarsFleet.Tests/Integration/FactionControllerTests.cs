@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Newtonsoft.Json;
 using StarWarsFleet.Application.Factions.UseCases.Update;
+using Xunit.Sdk;
 
 namespace StarWarsFleet.Tests.Integration;
 
@@ -70,6 +71,9 @@ public class FactionControllerTests(CustomWebApplicationFactory factory) : IClas
         // Confirma que foi deletado
         var getResponse = await _client.GetAsync("/faction");
         var list = await getResponse.Content.ReadFromJsonAsync<List<FactionEntity>>();
+
+        if(list is null) throw new NullException("list não pode ser nulo");
+
         Assert.DoesNotContain(list, f => f.Id == createdFaction.Id);
     }
 }
